@@ -26,20 +26,32 @@ type FifthAnniversarySchemaType = z.infer<typeof fifthAnniversarySchema>;
 
 const RoleOptions: FormSelectOption<string>[] = [
   {
-    label: 'Ứng viên',
-    value: 'Ứng viên',
+    label: 'Phó tổng giám đốc',
+    value: 'Phó tổng giám đốc',
   },
   {
     label: 'Thư ký',
     value: 'Thư ký',
   },
   {
-    label: 'Giám đốc tài chính',
-    value: 'Giám đốc tài chính',
+    label: 'Giám đốc tỉnh',
+    value: 'Giám đốc tỉnh',
   },
   {
-    label: 'Giám đốc khu vực',
-    value: 'Giám đốc khu vực',
+    label: 'Phó giám đốc tỉnh',
+    value: 'Phó giám đốc tỉnh',
+  },
+  {
+    label: 'Giám đốc chi nhánh',
+    value: 'Giám đốc chi nhánh',
+  },
+  {
+    label: 'Phó giám đốc chi nhánh',
+    value: 'Phó giám đốc chi nhánh',
+  },
+  {
+    label: 'Phó phòng chi nhánh',
+    value: 'Phó phòng chi nhánh',
   },
   {
     label: 'Giám đốc kinh doanh',
@@ -50,20 +62,36 @@ const RoleOptions: FormSelectOption<string>[] = [
     value: 'Phó giám đốc kinh doanh',
   },
   {
-    label: 'Trưởng phòng',
-    value: 'Trưởng phòng',
+    label: 'Giám đốc tài chính',
+    value: 'Giám đốc tài chính',
   },
   {
-    label: 'Phó phòng',
-    value: 'Phó phòng',
+    label: 'Phó giám đốc tài chính',
+    value: 'Phó giám đốc tài chính',
   },
   {
-    label: 'Trợ lý',
-    value: 'Trợ lý',
+    label: 'Giám đốc',
+    value: 'Giám đốc',
+  },
+  {
+    label: 'Phó giám đốc',
+    value: 'Phó giám đốc',
+  },
+  {
+    label: 'Trưởng phòng kinh doanh',
+    value: 'Trưởng phòng kinh doanh',
+  },
+  {
+    label: 'Phó phòng kinh doanh',
+    value: 'Phó phòng kinh doanh',
   },
   {
     label: 'Ứng viên trưởng phòng',
     value: 'Ứng viên trưởng phòng',
+  },
+  {
+    label: 'Trợ lý',
+    value: 'Trợ lý',
   },
   {
     label: 'Đầu chủ',
@@ -80,7 +108,7 @@ const RoleOptions: FormSelectOption<string>[] = [
 ];
 
 export const FifthAnniversary = () => {
-  const invitationRef = useRef(null);
+  const invitationRef = useRef<any>(null);
 
   const form = useForm<FifthAnniversarySchemaType>({
     resolver: zodResolver(fifthAnniversarySchema),
@@ -97,12 +125,29 @@ export const FifthAnniversary = () => {
 
   const handleDownload = async (fileName?: string) => {
     if (invitationRef.current) {
+      const style = document.createElement('style');
+      style.innerHTML = `
+      @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+      * {
+        font-family: 'Quicksand', sans-serif !important;
+      }
+    `;
+
+      // Append the style to the card container
+      invitationRef.current.appendChild(style);
+
+      // Generate the canvas with the applied font styles
       const canvas = await html2canvas(invitationRef.current, {
         useCORS: true,
-        scale: 2,
       });
+
+      // Remove the style element after rendering
+      invitationRef.current.removeChild(style);
+
+      // Convert canvas to a JPEG image
       const dataURL = canvas.toDataURL('image/png');
 
+      // Create a download link
       const link = document.createElement('a');
       link.href = dataURL;
       link.download = fileName ?? 'thu-moi.png';
@@ -111,7 +156,7 @@ export const FifthAnniversary = () => {
   };
 
   return (
-    <div className="md:container md:mx-auto max-md:px-4 py-4">
+    <div className="max-w-[860px] md:mx-auto px-2 lg:px-0 py-4">
       <Form {...form}>
         <form
           id="5th-anni-form"
@@ -120,7 +165,7 @@ export const FifthAnniversary = () => {
           })}
         >
           <h3 className="text-2xl font-semibold mb-3">Thông tin thư mời</h3>
-          <div className="grid grid-cols-3 max-sm:grid-cols-1 gap-4">
+          <div className="flex flex-col gap-2">
             <FormInput<FifthAnniversarySchemaType>
               name="name"
               label="Tên"
@@ -133,7 +178,6 @@ export const FifthAnniversary = () => {
               name="role"
               label="Chức danh"
               options={RoleOptions}
-              sortByAlpha
             />
 
             <FormAvatarUpload<FifthAnniversarySchemaType>
@@ -143,7 +187,7 @@ export const FifthAnniversary = () => {
             />
           </div>
 
-          <div className="flex justify-end gap-3 mt-5">
+          <div className="flex justify-start gap-3 mt-5">
             <Button
               variant="outline"
               onClick={(e) => {
@@ -159,7 +203,7 @@ export const FifthAnniversary = () => {
                 e.preventDefault();
                 if (name && role) {
                   const fileName = convertSlugify(role + ' ' + name);
-                  handleDownload(`thu-moi-${fileName}`);
+                  handleDownload(`thu-moi-${fileName}.png`);
                 } else {
                   handleDownload();
                 }
@@ -172,7 +216,7 @@ export const FifthAnniversary = () => {
         </form>
       </Form>
 
-      <h3 className="text-2xl font-semibold my-3">Ảnh xem trước</h3>
+      <h3 className="text-2xl font-semibold my-5">Ảnh xem trước</h3>
 
       <div className="flex w-full justify-center">
         <div ref={invitationRef} className="relative max-w-[860px] h-auto">
@@ -188,7 +232,7 @@ export const FifthAnniversary = () => {
           />
 
           {file && (
-            <div className="absolute bottom-[100px] right-[75px] -z-[1]">
+            <div className="absolute bottom-[15%] md:bottom-[90px] lg:bottom-[100px] right-[8%] md:right-[65px] lg:right-[75px] -z-[1]">
               <Image
                 src={file as string}
                 alt="avatar"
@@ -199,9 +243,17 @@ export const FifthAnniversary = () => {
             </div>
           )}
 
-          <div className="w-[320px] absolute bottom-[82px] right-[56px] flex flex-col gap-[2px]">
-            {role && <h4 className="w-full font-bold text-xl text-white text-center">{role}</h4>}
-            {name && <h4 className="w-full font-bold text-lg text-white text-center">{name}</h4>}
+          <div className="w-[48%] md:w-[320px] absolute bottom-[11%] md:bottom-[74px] lg:bottom-[74px] right-[1%] md:right-[46px] lg:right-[56px] flex flex-col">
+            {role && (
+              <h4 className="w-full font-bold text-lg lg:text-xl h-[18px] md:h-[20px] lg:h-[24px] text-[#ffea85] uppercase text-center">
+                {role}
+              </h4>
+            )}
+            {name && (
+              <h4 className="w-full font-bold text-[1.6rem] lg:text-[1.8rem] text-white text-center">
+                {name}
+              </h4>
+            )}
           </div>
         </div>
       </div>
