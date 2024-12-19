@@ -223,34 +223,33 @@ export const FifthAnniversary = () => {
           <Image
             src="/images/thumoi.png"
             alt="thu-moi"
-            objectFit="cover"
             priority
             width={0}
             height={0}
             unoptimized
-            className="w-full h-auto"
+            className="w-full h-auto object-cover"
           />
 
           {file && (
-            <div className="absolute bottom-[15%] md:bottom-[90px] lg:bottom-[100px] right-[8%] md:right-[65px] lg:right-[75px] -z-[1]">
+            <div className="absolute bottom-[12%] md:bottom-[90px] lg:bottom-[100px] right-[5%] md:right-[65px] lg:right-[75px] -z-[1]">
               <Image
                 src={file as string}
                 alt="avatar"
                 width={0}
                 height={0}
-                className="w-72 h-72 object-cover"
+                className="w-40 h-40 md:w-72 md:h-72 object-cover"
               />
             </div>
           )}
 
           <div className="w-[48%] md:w-[320px] absolute bottom-[11%] md:bottom-[74px] lg:bottom-[74px] right-[1%] md:right-[46px] lg:right-[56px] flex flex-col">
             {role && (
-              <h4 className="w-full font-bold text-lg lg:text-xl h-[18px] md:h-[20px] lg:h-[24px] text-[#ffea85] uppercase text-center">
+              <h4 className="w-full font-bold text-[10px] md:text-lg lg:text-xl h-[14px] md:h-[20px] lg:h-[24px] text-[#ffea85] uppercase text-center">
                 {role}
               </h4>
             )}
             {name && (
-              <h4 className="w-full font-bold text-[1.6rem] lg:text-[1.8rem] text-white text-center">
+              <h4 className="w-full font-bold text-[12px] md:text-[1.6rem] lg:text-[1.8rem] text-white text-center">
                 {name}
               </h4>
             )}
