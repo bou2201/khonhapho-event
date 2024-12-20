@@ -10,11 +10,17 @@ import {
   FormSelect,
   FormSelectOption,
 } from '@/components/form-handlers';
-import { useRef } from 'react';
-import Image from 'next/image';
-import html2canvas from 'html2canvas-pro';
+import { useEffect, useRef, useState } from 'react';
 import { CloudDownload } from 'lucide-react';
 import { convertSlugify } from '@/lib/utils';
+import {
+  drawAvatarCanvas,
+  drawBackgroundCanvas,
+  drawFullname,
+  drawInitialCanvas,
+  drawRole,
+} from '@/lib/canvas';
+import { ImageCrop } from '@/components/image-handlers';
 
 const fifthAnniversarySchema = z.object({
   name: z.string(),
@@ -107,8 +113,49 @@ const RoleOptions: FormSelectOption<string>[] = [
   },
 ];
 
+const CanvasPreview = ({ role, name, file }: FifthAnniversarySchemaType) => {
+  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext('2d');
+      if (!canvas || !ctx) return;
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+      await drawAvatarCanvas(ctx, file);
+      await drawBackgroundCanvas(ctx);
+      drawFullname(ctx, name || 'Họ & Tên');
+      drawRole(ctx, role || 'Chức danh');
+    };
+    loadData();
+  }, [role, name, file]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const canvas = canvasRef.current;
+      if (canvas) {
+        const ctx = canvas.getContext('2d');
+        await drawInitialCanvas(canvas);
+        if (!ctx) return;
+        await drawAvatarCanvas(ctx);
+        await drawBackgroundCanvas(ctx);
+        drawFullname(ctx, 'Họ & Tên');
+        drawRole(ctx, 'Chức danh');
+      }
+    };
+    loadData();
+  }, []);
+
+  return (
+    <div className="flex justify-center items-center w-full">
+      <canvas id="canvas-preview" ref={canvasRef} className="w-full"></canvas>
+    </div>
+  );
+};
+
 export const FifthAnniversary = () => {
   const invitationRef = useRef<any>(null);
+  const [cropImage, setCropImage] = useState<File>();
 
   const form = useForm<FifthAnniversarySchemaType>({
     resolver: zodResolver(fifthAnniversarySchema),
@@ -124,139 +171,92 @@ export const FifthAnniversary = () => {
   const [name, role, file] = watch(['name', 'role', 'file']);
 
   const handleDownload = async (fileName?: string) => {
-    if (invitationRef.current) {
-      const style = document.createElement('style');
-      style.innerHTML = `
-        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
-        * {
-          font-family: 'Quicksand', sans-serif !important;
-        }
-      `;
-
-      // Append the style to the card container
-      invitationRef.current.appendChild(style);
-
-      // Generate the canvas with the applied font styles
-      const canvas = await html2canvas(invitationRef.current, {
-        useCORS: true,
-      });
-
-      // Remove the style element after rendering
-      invitationRef.current.removeChild(style);
-
-      // Convert canvas to a JPEG image
-      const dataURL = canvas.toDataURL('image/png');
-
-      // Create a download link
-      const link = document.createElement('a');
-      link.href = dataURL;
-      link.download = fileName ?? 'thu-moi.png';
-      link.click();
-    }
+    const canvas = document.getElementById('canvas-preview') as HTMLCanvasElement;
+    if (!canvas) return;
+    const dataUrl = canvas.toDataURL('image/jpeg');
+    const link = document.createElement('a');
+    link.href = dataUrl;
+    link.download = fileName ?? 'thu-moi.jpeg';
+    link.click();
   };
 
   return (
-    <div className="max-w-[860px] md:mx-auto px-2 lg:px-0 py-4">
-      <Form {...form}>
-        <form
-          id="5th-anni-form"
-          onSubmit={handleSubmit((data) => {
-            console.log(data);
-          })}
-        >
-          <h3 className="text-2xl font-semibold mb-3">Thông tin thư mời</h3>
-          <div className="flex flex-col gap-2">
-            <FormInput<FifthAnniversarySchemaType>
-              name="name"
-              label="Tên"
-              inputProps={{
-                placeholder: 'Nhập tên',
-              }}
-            />
+    <>
+      <div className="max-w-[860px] md:mx-auto px-2 lg:px-0 py-4">
+        <Form {...form}>
+          <form
+            id="5th-anni-form"
+            onSubmit={handleSubmit((data) => {
+              console.log(data);
+            })}
+          >
+            <h3 className="text-2xl font-semibold mb-3">Thông tin thư mời</h3>
+            <div className="flex flex-col gap-2">
+              <FormInput<FifthAnniversarySchemaType>
+                name="name"
+                label="Họ và tên"
+                inputProps={{
+                  placeholder: 'Nhập họ và tên',
+                }}
+              />
 
-            <FormSelect<FifthAnniversarySchemaType>
-              name="role"
-              label="Chức danh"
-              options={RoleOptions}
-            />
+              <FormSelect<FifthAnniversarySchemaType>
+                name="role"
+                label="Chức danh"
+                options={RoleOptions}
+              />
 
-            <FormAvatarUpload<FifthAnniversarySchemaType>
-              name="file"
-              label="Hình ảnh"
-              showPreview={false}
-            />
-          </div>
-
-          <div className="flex justify-start gap-3 mt-5">
-            <Button
-              variant="outline"
-              onClick={(e) => {
-                e.preventDefault();
-                reset();
-              }}
-            >
-              Làm mới
-            </Button>
-            <Button
-              type="button"
-              onClick={(e) => {
-                e.preventDefault();
-                if (name && role) {
-                  const fileName = convertSlugify(role + ' ' + name);
-                  handleDownload(`thu-moi-${fileName}.png`);
-                } else {
-                  handleDownload();
-                }
-              }}
-              disabled={!name || !role || !file}
-            >
-              <CloudDownload className="h-4 w-4 mr-1 opacity-70" />
-              Tải xuống thư mời
-            </Button>
-          </div>
-        </form>
-      </Form>
-
-      <h3 className="text-2xl font-semibold my-5">Ảnh xem trước</h3>
-
-      <div className="flex w-full justify-center">
-        <div ref={invitationRef} className="relative max-w-[860px] h-auto">
-          <Image
-            src="/images/thu-moi.png"
-            alt="thu-moi"
-            priority
-            width={0}
-            height={0}
-            unoptimized
-            className="w-full h-auto object-cover"
-          />
-
-          {file && (
-            <div className="absolute bottom-[12%] md:bottom-[90px] lg:bottom-[100px] right-[5%] md:right-[65px] lg:right-[75px] -z-[1]">
-              <Image
-                src={file as string}
-                alt="avatar"
-                width={0}
-                height={0}
-                className="w-40 h-40 md:w-72 md:h-72 object-cover"
+              <FormAvatarUpload<FifthAnniversarySchemaType>
+                name="file"
+                label="Hình ảnh"
+                showPreview={false}
               />
             </div>
-          )}
 
-          <div className="w-[48%] md:w-[320px] absolute bottom-[11%] md:bottom-[74px] lg:bottom-[74px] right-[1%] md:right-[46px] lg:right-[56px] flex flex-col">
-            {role && (
-              <h4 className="w-full font-bold text-[10px] md:text-lg lg:text-xl h-[14px] md:h-[20px] lg:h-[24px] text-[#ffea85] uppercase text-center">
-                {role}
-              </h4>
-            )}
-            {name && (
-              <h4 className="w-full font-bold text-[12px] md:text-[1.6rem] lg:text-[1.8rem] text-white text-center">
-                {name}
-              </h4>
-            )}
-          </div>
+            <div className="flex justify-start gap-3 mt-5">
+              <Button
+                variant="outline"
+                onClick={(e) => {
+                  e.preventDefault();
+                  reset();
+                  setCropImage(undefined);
+                }}
+              >
+                Làm mới
+              </Button>
+              <Button
+                type="button"
+                onClick={(e) => {
+                  e.preventDefault();
+                  if (name && role) {
+                    const fileName = convertSlugify(role + ' ' + name);
+                    handleDownload(`thu-moi-${fileName}.jpeg`);
+                  } else {
+                    handleDownload();
+                  }
+                }}
+                disabled={!name || !role || !file}
+              >
+                <CloudDownload className="h-4 w-4 mr-1 opacity-70" />
+                Tải xuống thư mời
+              </Button>
+            </div>
+          </form>
+        </Form>
+
+        <h3 className="text-2xl font-semibold my-5">Ảnh xem trước</h3>
+
+        <div ref={invitationRef} className='pointer-events-none'>
+          <CanvasPreview name={name} role={role} file={cropImage} />
         </div>
       </div>
-    </div>
+
+      <ImageCrop
+        image={file}
+        onCrop={(img) => {
+          setCropImage(img);
+        }}
+      />
+    </>
   );
 };

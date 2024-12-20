@@ -16,7 +16,7 @@ import Image from 'next/image';
 
 type AvatarUploadProps = {
   value?: string;
-  onChange?: (value?: string) => void;
+  onChange?: (value?: File) => void;
   showPreview?: boolean;
 };
 
@@ -26,8 +26,7 @@ export const AvatarUpload = ({ value, onChange, showPreview }: Readonly<AvatarUp
   const handleChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
-      const base64 = (await toBase64(file)) as string;
-      onChange?.(base64);
+      onChange?.(file);
     }
   };
 
