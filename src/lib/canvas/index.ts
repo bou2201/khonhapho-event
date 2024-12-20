@@ -79,14 +79,14 @@ const drawAvatarCanvas = (ctx: CanvasRenderingContext2D, image?: File): Promise<
   });
 
 const drawFullname = (ctx: CanvasRenderingContext2D, text?: string) => {
-  ctx.font = `bold ${(32 / 1000) * canvasWidth}px Quicksand`;
+  ctx.font = `bold ${(36 / 1000) * canvasWidth}px Quicksand`;
   ctx.fillStyle = 'white';
   ctx.lineWidth = 5;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
   const x = (760 / 1000) * canvasWidth;
-  const y = (702 / 1000) * canvasWidth;
+  const y = (705 / 1000) * canvasWidth;
 
   ctx.fillText(text ?? '', x, y);
 };

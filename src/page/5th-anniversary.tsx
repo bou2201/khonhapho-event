@@ -117,17 +117,22 @@ const CanvasPreview = ({ role, name, file }: FifthAnniversarySchemaType) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
   useEffect(() => {
-    const loadData = async () => {
+    const timeout = setTimeout(async () => {
       const canvas = canvasRef.current;
       const ctx = canvas?.getContext('2d');
       if (!canvas || !ctx) return;
+
       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+
       await drawAvatarCanvas(ctx, file);
       await drawBackgroundCanvas(ctx);
-      drawFullname(ctx, name || 'Họ & Tên');
+      drawFullname(ctx, name || 'Họ Tên');
       drawRole(ctx, role || 'Chức danh');
+    }, 600);
+
+    return () => {
+      clearTimeout(timeout);
     };
-    loadData();
   }, [role, name, file]);
 
   useEffect(() => {
@@ -208,7 +213,7 @@ export const FifthAnniversary = () => {
 
               <FormAvatarUpload<FifthAnniversarySchemaType>
                 name="file"
-                label="Hình ảnh"
+                label="Chọn ảnh avatar"
                 showPreview={false}
               />
             </div>
@@ -246,7 +251,7 @@ export const FifthAnniversary = () => {
 
         <h3 className="text-2xl font-semibold my-5">Ảnh xem trước</h3>
 
-        <div ref={invitationRef} className='pointer-events-none'>
+        <div ref={invitationRef} className="pointer-events-none">
           <CanvasPreview name={name} role={role} file={cropImage} />
         </div>
       </div>
