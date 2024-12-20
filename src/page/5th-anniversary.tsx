@@ -127,11 +127,11 @@ export const FifthAnniversary = () => {
     if (invitationRef.current) {
       const style = document.createElement('style');
       style.innerHTML = `
-      @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
-      * {
-        font-family: 'Quicksand', sans-serif !important;
-      }
-    `;
+        @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+        * {
+          font-family: 'Quicksand', sans-serif !important;
+        }
+      `;
 
       // Append the style to the card container
       invitationRef.current.appendChild(style);
@@ -208,6 +208,7 @@ export const FifthAnniversary = () => {
                   handleDownload();
                 }
               }}
+              disabled={!name || !role || !file}
             >
               <CloudDownload className="h-4 w-4 mr-1 opacity-70" />
               Tải xuống thư mời
@@ -221,7 +222,7 @@ export const FifthAnniversary = () => {
       <div className="flex w-full justify-center">
         <div ref={invitationRef} className="relative max-w-[860px] h-auto">
           <Image
-            src="/images/thumoi.png"
+            src="/images/thu-moi.png"
             alt="thu-moi"
             priority
             width={0}
