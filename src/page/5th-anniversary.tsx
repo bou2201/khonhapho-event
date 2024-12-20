@@ -123,8 +123,16 @@ const RoleOptions: FormSelectOption<string>[] = [
     value: 'Giám đốc chi nhánh',
   },
   {
+    label: 'Phó giám đốc chi nhánh',
+    value: 'Phó giám đốc chi nhánh',
+  },
+  {
     label: 'Giám đốc',
     value: 'Giám đốc',
+  },
+  {
+    label: 'Phó giám đốc',
+    value: 'Phó giám đốc',
   },
   {
     label: 'Trưởng phòng',
@@ -137,6 +145,10 @@ const RoleOptions: FormSelectOption<string>[] = [
   {
     label: 'Ứng viên trưởng phòng',
     value: 'Ứng viên trưởng phòng',
+  },
+  {
+    label: 'Thư ký',
+    value: 'Thư ký',
   },
   {
     label: 'Trợ lý',
