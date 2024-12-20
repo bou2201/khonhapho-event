@@ -79,25 +79,25 @@ const drawAvatarCanvas = (ctx: CanvasRenderingContext2D, image?: File): Promise<
   });
 
 const drawFullname = (ctx: CanvasRenderingContext2D, text?: string) => {
-  ctx.font = `bold ${(36 / 1000) * canvasWidth}px Quicksand`;
+  ctx.font = `bold ${(34 / 1000) * canvasWidth}px Open Sans`;
   ctx.fillStyle = 'white';
   ctx.lineWidth = 5;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
 
-  const x = (760 / 1000) * canvasWidth;
+  const x = (755 / 1000) * canvasWidth;
   const y = (705 / 1000) * canvasWidth;
 
   ctx.fillText(text ?? '', x, y);
 };
 
 const drawRole = (ctx: CanvasRenderingContext2D, text?: string) => {
-  ctx.font = `bold ${(24 / 1000) * canvasWidth}px Quicksand`;
+  ctx.font = `bold ${(22 / 1000) * canvasWidth}px Open Sans`;
   ctx.fillStyle = '#FBD288';
   ctx.lineWidth = 5;
   ctx.textAlign = 'center';
   ctx.textBaseline = 'middle';
-  const x = (760 / 1000) * canvasWidth;
+  const x = (755 / 1000) * canvasWidth;
   const y = (668 / 1000) * canvasWidth;
 
   ctx.fillText(text?.toUpperCase() ?? '', x, y);

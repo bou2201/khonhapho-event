@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Geist, Geist_Mono, Quicksand } from 'next/font/google';
+import { Geist, Geist_Mono, Quicksand, Open_Sans } from 'next/font/google';
 import Favicon from '~public/favicon.ico';
 
 import '@/styles/globals.css';
@@ -16,6 +16,11 @@ const geistMono = Geist_Mono({
 
 const quicksand = Quicksand({
   variable: '--font-quicksand',
+  subsets: ['latin'],
+});
+
+const openSans = Open_Sans({
+  variable: '--font-open-sans',
   subsets: ['latin'],
 });
 
@@ -49,7 +54,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${quicksand.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${openSans.className} ${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {children}
       </body>

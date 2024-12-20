@@ -30,66 +30,109 @@ const fifthAnniversarySchema = z.object({
 
 type FifthAnniversarySchemaType = z.infer<typeof fifthAnniversarySchema>;
 
+// const RoleOptions: FormSelectOption<string>[] = [
+//   {
+//     label: 'Ông / Bà',
+//     value: 'Ông / Bà',
+//   },
+//   {
+//     label: 'Phó tổng giám đốc',
+//     value: 'Phó tổng giám đốc',
+//   },
+//   {
+//     label: 'Thư ký',
+//     value: 'Thư ký',
+//   },
+//   {
+//     label: 'Giám đốc tỉnh',
+//     value: 'Giám đốc tỉnh',
+//   },
+//   {
+//     label: 'Phó giám đốc tỉnh',
+//     value: 'Phó giám đốc tỉnh',
+//   },
+//   {
+//     label: 'Giám đốc chi nhánh',
+//     value: 'Giám đốc chi nhánh',
+//   },
+//   {
+//     label: 'Phó giám đốc chi nhánh',
+//     value: 'Phó giám đốc chi nhánh',
+//   },
+//   {
+//     label: 'Phó phòng chi nhánh',
+//     value: 'Phó phòng chi nhánh',
+//   },
+//   {
+//     label: 'Giám đốc kinh doanh',
+//     value: 'Giám đốc kinh doanh',
+//   },
+//   {
+//     label: 'Phó giám đốc kinh doanh',
+//     value: 'Phó giám đốc kinh doanh',
+//   },
+//   {
+//     label: 'Giám đốc tài chính',
+//     value: 'Giám đốc tài chính',
+//   },
+//   {
+//     label: 'Phó giám đốc tài chính',
+//     value: 'Phó giám đốc tài chính',
+//   },
+//   {
+//     label: 'Giám đốc',
+//     value: 'Giám đốc',
+//   },
+//   {
+//     label: 'Phó giám đốc',
+//     value: 'Phó giám đốc',
+//   },
+//   {
+//     label: 'Trưởng phòng kinh doanh',
+//     value: 'Trưởng phòng kinh doanh',
+//   },
+//   {
+//     label: 'Phó phòng kinh doanh',
+//     value: 'Phó phòng kinh doanh',
+//   },
+//   {
+//     label: 'Ứng viên trưởng phòng',
+//     value: 'Ứng viên trưởng phòng',
+//   },
+//   {
+//     label: 'Trợ lý',
+//     value: 'Trợ lý',
+//   },
+//   {
+//     label: 'Đầu chủ',
+//     value: 'Đầu chủ',
+//   },
+//   {
+//     label: 'Chuyên viên',
+//     value: 'Chuyên viên',
+//   },
+//   {
+//     label: 'Học viên',
+//     value: 'Học viên',
+//   },
+// ];
+
 const RoleOptions: FormSelectOption<string>[] = [
-  {
-    label: 'Phó tổng giám đốc',
-    value: 'Phó tổng giám đốc',
-  },
-  {
-    label: 'Thư ký',
-    value: 'Thư ký',
-  },
-  {
-    label: 'Giám đốc tỉnh',
-    value: 'Giám đốc tỉnh',
-  },
-  {
-    label: 'Phó giám đốc tỉnh',
-    value: 'Phó giám đốc tỉnh',
-  },
   {
     label: 'Giám đốc chi nhánh',
     value: 'Giám đốc chi nhánh',
-  },
-  {
-    label: 'Phó giám đốc chi nhánh',
-    value: 'Phó giám đốc chi nhánh',
-  },
-  {
-    label: 'Phó phòng chi nhánh',
-    value: 'Phó phòng chi nhánh',
-  },
-  {
-    label: 'Giám đốc kinh doanh',
-    value: 'Giám đốc kinh doanh',
-  },
-  {
-    label: 'Phó giám đốc kinh doanh',
-    value: 'Phó giám đốc kinh doanh',
-  },
-  {
-    label: 'Giám đốc tài chính',
-    value: 'Giám đốc tài chính',
-  },
-  {
-    label: 'Phó giám đốc tài chính',
-    value: 'Phó giám đốc tài chính',
   },
   {
     label: 'Giám đốc',
     value: 'Giám đốc',
   },
   {
-    label: 'Phó giám đốc',
-    value: 'Phó giám đốc',
+    label: 'Trưởng phòng',
+    value: 'Trưởng phòng',
   },
   {
-    label: 'Trưởng phòng kinh doanh',
-    value: 'Trưởng phòng kinh doanh',
-  },
-  {
-    label: 'Phó phòng kinh doanh',
-    value: 'Phó phòng kinh doanh',
+    label: 'Phó phòng',
+    value: 'Phó phòng',
   },
   {
     label: 'Ứng viên trưởng phòng',
@@ -110,6 +153,10 @@ const RoleOptions: FormSelectOption<string>[] = [
   {
     label: 'Học viên',
     value: 'Học viên',
+  },
+  {
+    label: 'Khách mời',
+    value: 'Khách mời',
   },
 ];
 
