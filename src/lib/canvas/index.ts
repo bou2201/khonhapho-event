@@ -49,8 +49,8 @@ const drawAvatarCanvas = (ctx: CanvasRenderingContext2D, image?: File): Promise<
         const avatarImage = await loadImage('/images/avatar.jpg');
         const avatarX = (575 / 1000) * canvasWidth;
         const avatarY = (360 / 1000) * canvasWidth;
-        const avatarWidth = (340 / 1000) * canvasWidth;
-        const avatarHeight = (340 / 1000) * canvasWidth;
+        const avatarWidth = (355 / 1000) * canvasWidth;
+        const avatarHeight = (355 / 1000) * canvasWidth;
         ctx.drawImage(avatarImage, avatarX, avatarY, avatarWidth, avatarHeight);
         console.log('Thời gian vẽ avatar:', performance.now() - start);
         resolve();
@@ -61,8 +61,8 @@ const drawAvatarCanvas = (ctx: CanvasRenderingContext2D, image?: File): Promise<
           avatarImage.onload = () => {
             const avatarX = (575 / 1000) * canvasWidth;
             const avatarY = (360 / 1000) * canvasWidth;
-            const avatarWidth = (340 / 1000) * canvasWidth;
-            const avatarHeight = (340 / 1000) * canvasWidth;
+            const avatarWidth = (355 / 1000) * canvasWidth;
+            const avatarHeight = (355 / 1000) * canvasWidth;
             ctx.drawImage(avatarImage, avatarX, avatarY, avatarWidth, avatarHeight);
             console.log('Thời gian vẽ avatar:', performance.now() - start);
             resolve();
